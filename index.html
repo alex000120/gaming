@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Aplicaciones Interactivas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        secondary: '#00FF88',
+                        accent: '#FF6B6B',
+                        cosmic: '#4ECDC4'
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'fade-in': 'fadeIn 1s ease-out',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' }
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 20px rgba(93, 92, 222, 0.3)' },
+                            '100%': { boxShadow: '0 0 40px rgba(93, 92, 222, 0.8)' }
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(50px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        .font-orbitron { font-family: 'Orbitron', monospace; }
+        .font-inter { font-family: 'Inter', sans-serif; }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .dark .glass-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform, box-shadow;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-12px) scale(1.03);
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.35);
+        }
+        
+        .card-hover:active {
+            transform: translateY(-8px) scale(1.01);
+            transition: all 0.1s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #5D5CDE, #4a49b1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform, box-shadow, background;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #4a49b1, #3d3a8f);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(93, 92, 222, 0.5);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(-1px) scale(0.98);
+            transition: all 0.1s ease;
+        }
+        
+        .category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 8s ease-in-out infinite;
+            will-change: transform;
+            filter: blur(1px);
+        }
+        
+        .smooth-scroll {
+            scroll-behavior: smooth;
+        }
+        
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
+</head>
+<body class="h-full font-inter gradient-bg">
+    <!-- Dark mode detection -->
+    <script>
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+
+    <!-- Floating background elements -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="floating-element w-72 h-72 bg-primary top-1/4 left-1/4" style="animation-delay: 0s;"></div>
+        <div class="floating-element w-96 h-96 bg-accent top-3/4 right-1/4" style="animation-delay: 2s;"></div>
+        <div class="floating-element w-64 h-64 bg-secondary top-1/2 right-1/3" style="animation-delay: 4s;"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="relative z-10 text-center py-12 px-4">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="font-orbitron text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 animate-fade-in">
+                <span class="bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent">
+                    PORTAL INTERACTIVO
+                </span>
+            </h1>
+            <p class="text-xl md:text-2xl text-white/80 mb-8 max-w-3xl mx-auto leading-relaxed">
+                Descubre una colección de aplicaciones innovadoras: desde exploración cósmica hasta inteligencia artificial, 
+                cada experiencia diseñada para sorprenderte y entretenerte.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4 text-sm md:text-base">
+                <span class="category-badge bg-white/20 text-white">
+                    🎮 8 Aplicaciones Únicas
+                </span>
+                <span class="category-badge bg-white/20 text-white">
+                    📱 Completamente Responsivas
+                </span>
+                <span class="category-badge bg-white/20 text-white">
+                    ✨ Tecnología Avanzada
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Applications Grid -->
+    <main class="relative z-10 max-w-7xl mx-auto px-4 pb-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            
+            <!-- Cosmos Explorer -->
+            <div class="glass-card rounded-2xl p-6 card-hover animate-slide-up" style="animation-delay: 0.1s;">
+                <div class="text-center mb-4">
+                    <div class="text-6xl mb-4 animate-pulse-slow">🌌</div>
+                    <h3 class="font-orbitron text-xl font-bold text-white mb-2">Cosmos Explorer</h3>
+                    <span class="category-badge bg-gradient-to-r from-purple-500 to-blue-500 text-white">
+                        🔭 Exploración Espacial
+                    </span>
+                </div>
+                <p class="text-white/80 text-sm mb-4 leading-relaxed">
+                    Embárcate en un viaje fascinante por el universo. Explora agujeros negros, presencia supernovas y descubre planetas con visualizaciones interactivas espectaculares.
+                </p>
+                <div class="bg-white/10 rounded-lg p-3 mb-4">
+                    <h4 class="text-white font-semibold text-sm mb-2">📋 Cómo usar:</h4>
+                    <ul class="text-white/70 text-xs space-y-1">
+                        <li>• Navega entre las pestañas: Agujero Negro, Supernova, Planetas</li>
+                        <li>• Haz clic en "Simular Acreción de Materia" para ver efectos</li>
+                        <li>• Detona una supernova y observa la explosión</li>
+                        <li>• Explora información detallada de cada planeta</li>
+                    </ul>
+                </div>
+                <button onclick="window.open('blackhole.html', '_blank')" 
+                        class="w-full btn-primary text-white font-semibold py-3 px-4 rounded-xl text-base">
+                    🚀 Explorar Cosmos
+                </button>
+            </div>
+
+            <!-- Garden Harmony -->
+            <div class="glass-card rounded-2xl p-6 card-hover animate-slide-up" style="animation-delay: 0.2s;">
+                <div class="text-center mb-4">
+                    <div class="text-6xl mb-4 animate-pulse-slow">🌸</div>
+                    <h3 class="font-orbitron text-xl font-bold text-white mb-2">Garden Harmony</h3>
+                    <span class="category-badge bg-gradient-to-r from-green-500 to-teal-500 text-white">
+                        🧩 Puzzle Ecológico
+                    </span>
+                </div>
+                <p class="text-white/80 text-sm mb-4 leading-relaxed">
+                    Crea ecosistemas perfectos conectando flores, insectos y animales. Un puzzle inteligente que te enseña sobre cadenas alimentarias de forma divertida.
+                </p>
+                <div class="bg-white/10 rounded-lg p-3 mb-4">
+                    <h4 class="text-white font-semibold text-sm mb-2">📋 Cómo jugar:</h4>
+                    <ul class="text-white/70 text-xs space-y-1">
+                        <li>• Comienza siempre con una flor</li>
+                        <li>• Conecta insectos que se alimenten de esa flor</li>
+                        <li>• Agrega animales que coman esos insectos</li>
+                        <li>• Completa 3 cadenas para ganar el nivel</li>
+                    </ul>
+                </div>
+                <button onclick="window.open('jardin.html', '_blank')" 
+                        class="w-full btn-primary text-white font-semibold py-3 px-4 rounded-xl text-base">
+                    🌿 Crear Ecosistema
+                </button>
+            </div>
+
+            <!-- AI Neural Trainer -->
+            <div class="glass-card rounded-2xl p-6 card-hover animate-slide-up" style="animation-delay: 0.3s;">
+                <div class="text-center mb-4">
+                    <div class="text-6xl mb-4 animate-pulse-slow">🧠</div>
+                    <h3 class="font-orbitron text-xl font-bold text-white mb-2">AI Neural Trainer</h3>
+                    <span class="category-badge bg-gradient-to-r from-cyan-500 to-blue-500 text-white">
+                        🤖 Inteligencia Artificial
+                    </span>
+                </div>
+                <p class="text-white/80 text-sm mb-4 leading-relaxed">
+                    Simula ser una IA en entrenamiento. Resuelve desafíos de reconocimiento de patrones, clasificación de datos y memoria para evolucionar tu inteligencia.
+                </p>
+                <div class="bg-white/10 rounded-lg p-3 mb-4">
+                    <h4 class="text-white font-semibold text-sm mb-2">📋 Cómo entrenar:</h4>
+                    <ul class="text-white/70 text-xs space-y-1">
+                        <li>• Resuelve patrones lógicos en 30 segundos</li>
+                        <li>• Clasifica datos de red correctamente</li>
+                        <li>• Memoriza y repite secuencias</li>
+                        <li>• Aumenta tu IQ con cada respuesta correcta</li>
+                    </ul>
+                </div>
+                <button onclick="window.open('ia.html', '_blank')" 
+                        class="w-full btn-primary text-white font-semibold py-3 px-4 rounded-xl text-base">
+                    🚀 Entrenar IA
+                </button>
+            </div>
+
+            <!-- Dino Street Crossing -->
+            <div class="glass-card rounded-2xl p-6 card-hover animate-slide-up" style="animation-delay: 0.4s;">
+                <div class="text-center mb-4">
+                    <div class="text-6xl mb-4 animate-pulse-slow">🦕</div>
+                    <h3 class="font-orbitron text-xl font-bold text-white mb-2">Dino Street Crossing</h3>
+                    <span class="category-badge bg-gradient-to-r from-orange-500 to-red-500 text-white">
+                        🎮 Juego de Arcade
+                    </span>
+                </div>
+                <p class="text-white/80 text-sm mb-4 leading-relaxed">
+                    Ayuda al adorable dinosaurio a cruzar calles llenas de tráfico. Un juego adictivo estilo Frogger optimizado para móviles con controles táctiles perfectos.
+                </p>
+                <div class="bg-white/10 rounded-lg p-3 mb-4">
+                    <h4 class="text-white font-semibold text-sm mb-2">📋 Cómo jugar:</h4>
+                    <ul class="text-white/70 text-xs space-y-1">
+                        <li>• Usa los botones de dirección para mover al dino</li>
+                        <li>• Evita ser atropellado por los vehículos</li>
+                        <li>• Recolecta power-ups para ventajas especiales</li>
+                        <li>• Llega al final de cada nivel sin perder todas las vidas</li>
+                    </ul>
+                </div>
+                <button onclick="window.open('dino.html', '_blank')" 
+                        class="w-full btn-primary text-white font-semibold py-3 px-4 rounded-xl text-base">
+                    🏃‍♂️ Jugar Ahora
+                </button>
+            </div>
+
+            <!-- Calculadora Profesional -->
+            <div class="glass-card rounded-2xl p-6 card-hover animate-slide-up" style="animation-delay: 0.5s;">
+                <div class="text-center mb-4">
+                    <div class="text-6xl mb-4 animate-pulse-slow">📊</div>
+                    <h3 class="font-orbitron text-xl font-bold text-white mb-2">Calculadora Pro</h3>
+                    <span class="category-badge bg-gradient-to-r from-indigo-500 to-purple-500 text-white">
+                        🔢 Herramienta Educativa
+                    </span>
+                </div>
+                <p class="text-white/80 text-sm mb-4 leading-relaxed">
+                    Más que una calculadora: una herramienta educativa que muestra paso a paso cómo se resuelven las operaciones, perfecta para aprender matemáticas.
+                </p>
+                <div class="bg-white/10 rounded-lg p-3 mb-4">
+                    <h4 class="text-white font-semibold text-sm mb-2">📋 Características:</h4>
+                    <ul class="text-white/70 text-xs space-y-1">
+                        <li>• Operaciones básicas y avanzadas (sin, cos, √)</li>
+                        <li>• Explicación detallada paso a paso</li>
+                        <li>• Historial de cálculos guardados</li>
+                        <li>• Modo oscuro/claro automático</li>
+                    </ul>
+                </div>
+                <button onclick="window.open('calculadora.html', '_blank')" 
+                        class="w-full btn-primary text-white font-semibold py-3 px-4 rounded-xl text-base">
+                    🧮 Calcular
+                </button>
+            </div>
+
+            <!-- Stellar Collector -->
+            <div class="glass-card rounded-2xl p-6 card-hover animate-slide-up" style="animation-delay: 0.6s;">
+                <div class="text-center mb-4">
+                    <div class="text-6xl mb-4 animate-pulse-slow">⭐</div>
+                    <h3 class="font-orbitron text-xl font-bold text-white mb-2">Stellar Collector</h3>
+                    <span class="category-badge bg-gradient-to-r from-yellow-500 to-orange-500 text-white">
+                        🚀 Juego Espacial
+                    </span>
+                </div>
+                <p class="text-white/80 text-sm mb-4 leading-relaxed">
+                    Pilota tu nave espacial recolectando estrellas y evitando agujeros negros. Un juego espacial fluido con controles táctiles y efectos visuales impresionantes.
+                </p>
+                <div class="bg-white/10 rounded-lg p-3 mb-4">
+                    <h4 class="text-white font-semibold text-sm mb-2">📋 Controles:</h4>
+                    <ul class="text-white/70 text-xs space-y-1">
+                        <li>• Mueve el dedo por la pantalla para controlar la nave</li>
+                        <li>• Recolecta estrellas (10 pts) y planetas (50 pts)</li>
+                        <li>• Usa escudo y boost con los botones especiales</li>
+                        <li>• Evita los agujeros negros a toda costa</li>
+                    </ul>
+                </div>
+                <button onclick="window.open('astronomy.html', '_blank')" 
+                        class="w-full btn-primary text-white font-semibold py-3 px-4 rounded-xl text-base">
+                    🌟 Volar Ahora
+                </button>
+            </div>
+
+            <!-- Adivino Tu Número -->
+            <div class="glass-card rounded-2xl p-6 card-hover animate-slide-up" style="animation-delay: 0.7s;">
+                <div class="text-center mb-4">
+                    <div class="text-6xl mb-4 animate-pulse-slow">🔮</div>
+                    <h3 class="font-orbitron text-xl font-bold text-white mb-2">Adivino Tu Número</h3>
+                    <span class="category-badge bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+                        🎭 Entretenimiento
+                    </span>
+                </div>
+                <p class="text-white/80 text-sm mb-4 leading-relaxed">
+                    Una experiencia mágica e interactiva donde la "IA" lee tu mente y adivina el número que pensaste. Perfecto para sorprender a amigos y familiares.
+                </p>
+                <div class="bg-white/10 rounded-lg p-3 mb-4">
+                    <h4 class="text-white font-semibold text-sm mb-2">📋 Cómo funciona:</h4>
+                    <ul class="text-white/70 text-xs space-y-1">
+                        <li>• Piensa en un número del 1 al 20</li>
+                        <li>• Ingresa tu número en el campo</li>
+                        <li>• Observa el proceso de "análisis mental"</li>
+                        <li>• ¡Sorpréndete con la respuesta!</li>
+                    </ul>
+                </div>
+                <button onclick="window.open('adivino.html', '_blank')" 
+                        class="w-full btn-primary text-white font-semibold py-3 px-4 rounded-xl text-base">
+                    🧙‍♂️ Leer Mente
+                </button>
+            </div>
+
+            <!-- PlantCare -->
+            <div class="glass-card rounded-2xl p-6 card-hover animate-slide-up" style="animation-delay: 0.8s;">
+                <div class="text-center mb-4">
+                    <div class="text-6xl mb-4 animate-pulse-slow">🌱</div>
+                    <h3 class="font-orbitron text-xl font-bold text-white mb-2">PlantCare</h3>
+                    <span class="category-badge bg-gradient-to-r from-green-500 to-emerald-500 text-white">
+                        💚 Simulación de Vida
+                    </span>
+                </div>
+                <p class="text-white/80 text-sm mb-4 leading-relaxed">
+                    Cuida una planta virtual por 2 minutos y observa cómo florece con tus cuidados. Una experiencia relajante que enseña sobre responsabilidad y paciencia.
+                </p>
+                <div class="bg-white/10 rounded-lg p-3 mb-4">
+                    <h4 class="text-white font-semibold text-sm mb-2">📋 Cuidados necesarios:</h4>
+                    <ul class="text-white/70 text-xs space-y-1">
+                        <li>• Riega cuando la barra de agua baje</li>
+                        <li>• Ajusta la luz solar según las necesidades</li>
+                        <li>• Usa fertilizante para acelerar el crecimiento</li>
+                        <li>• Habla con tu planta para darle ánimo</li>
+                    </ul>
+                </div>
+                <button onclick="window.open('planta.html', '_blank')" 
+                        class="w-full btn-primary text-white font-semibold py-3 px-4 rounded-xl text-base">
+                    🌿 Cuidar Planta
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="mt-16 glass-card rounded-2xl p-8 text-center">
+            <h2 class="font-orbitron text-3xl font-bold text-white mb-8">Estadísticas del Portal</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-primary mb-2">8</div>
+                    <div class="text-white/70 text-sm">Aplicaciones Únicas</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-secondary mb-2">100%</div>
+                    <div class="text-white/70 text-sm">Responsivas</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-accent mb-2">0</div>
+                    <div class="text-white/70 text-sm">Instalación Requerida</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-cosmic mb-2">∞</div>
+                    <div class="text-white/70 text-sm">Horas de Diversión</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative z-10 text-center py-8 px-4 mt-16">
+        <div class="glass-card rounded-xl p-6 max-w-4xl mx-auto">
+            <p class="text-white/80 text-lg mb-4">
+                🚀 <strong>Portal Interactivo</strong> - Una colección curada de experiencias web innovadoras
+            </p>
+            <p class="text-white/60 text-sm">
+                Cada aplicación está optimizada para dispositivos móviles y de escritorio • 
+                Tecnologías modernas • Experiencias inmersivas
+            </p>
+            <div class="mt-6 flex flex-wrap justify-center gap-4 text-sm">
+                <span class="category-badge bg-white/10 text-white/70">HTML5</span>
+                <span class="category-badge bg-white/10 text-white/70">CSS3</span>
+                <span class="category-badge bg-white/10 text-white/70">JavaScript</span>
+                <span class="category-badge bg-white/10 text-white/70">TailwindCSS</span>
+                <span class="category-badge bg-white/10 text-white/70">Canvas API</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Animaciones de entrada escalonadas mejoradas
+        const cards = document.querySelectorAll('.animate-slide-up');
+        
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -30px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0) scale(1)';
+                    }, index * 100);
+                }
+            });
+        }, observerOptions);
+        
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(40px) scale(0.95)';
+            card.style.transition = 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            card.style.willChange = 'transform, opacity';
+            observer.observe(card);
+        });
+
+        // Efecto parallax optimizado con requestAnimationFrame
+        let ticking = false;
+        
+        function updateParallax() {
+            const scrolled = window.pageYOffset;
+            const elements = document.querySelectorAll('.floating-element');
+            
+            elements.forEach((element, index) => {
+                const speed = 0.3 + index * 0.1;
+                const yPos = scrolled * speed;
+                element.style.transform = `translate3d(0, ${yPos}px, 0) rotate(${scrolled * 0.05}deg)`;
+            });
+            
+            ticking = false;
+        }
+        
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(updateParallax);
+                ticking = true;
+            }
+        });
+
+        // Función para abrir aplicaciones con efecto de transición
+        function openApp(url) {
+            const overlay = document.createElement('div');
+            overlay.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center';
+            overlay.innerHTML = `
+                <div class="text-center text-white">
+                    <div class="text-6xl mb-4 animate-spin">🚀</div>
+                    <p class="text-xl">Cargando aplicación...</p>
+                </div>
+            `;
+            
+            document.body.appendChild(overlay);
+            
+            setTimeout(() => {
+                window.open(url, '_blank');
+                document.body.removeChild(overlay);
+            }, 1000);
+        }
+
+        // Efectos de interacción mejorados
+        const buttons = document.querySelectorAll('.btn-primary');
+        buttons.forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px) scale(1.02)';
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+            
+            button.addEventListener('touchstart', function() {
+                this.style.transform = 'translateY(-1px) scale(0.98)';
+            });
+            
+            button.addEventListener('touchend', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Smooth scroll para toda la página
+        document.documentElement.classList.add('smooth-scroll');
+
+        // Animación del título principal mejorada
+        const title = document.querySelector('.font-orbitron');
+        if (title) {
+            title.style.animation = 'fadeIn 1.5s ease-out, glow 3s ease-in-out infinite alternate';
+        }
+
+        // Efecto de hover para las tarjetas con throttling
+        const cardElements = document.querySelectorAll('.card-hover');
+        cardElements.forEach(card => {
+            let hoverTimeout;
+            
+            card.addEventListener('mouseenter', function() {
+                clearTimeout(hoverTimeout);
+                this.style.willChange = 'transform, box-shadow';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                hoverTimeout = setTimeout(() => {
+                    this.style.willChange = 'auto';
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>

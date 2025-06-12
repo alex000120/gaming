@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmos Explorer - Viaje por el Universo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap');
+        
+        .orbitron { font-family: 'Orbitron', monospace; }
+        .inter { font-family: 'Inter', sans-serif; }
+        
+        .stars {
+            background: radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+                        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+                        radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+                        radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
+                        radial-gradient(2px 2px at 160px 30px, #ddd, transparent),
+                        radial-gradient(1px 1px at 180px 10px, rgba(255,255,255,0.7), transparent),
+                        radial-gradient(2px 2px at 250px 60px, #ccc, transparent),
+                        radial-gradient(1px 1px at 300px 20px, rgba(255,255,255,0.5), transparent);
+            background-repeat: repeat;
+            background-size: 320px 150px;
+            animation: twinkle 4s ease-in-out infinite alternate;
+        }
+        
+        @keyframes twinkle {
+            0% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+        
+        .black-hole {
+            background: radial-gradient(circle at center, 
+                transparent 15%, 
+                rgba(138, 43, 226, 0.4) 35%, 
+                rgba(75, 0, 130, 0.7) 55%, 
+                #000 75%);
+            animation: rotate 15s linear infinite, pulse 2.5s ease-in-out infinite alternate;
+            position: relative;
+            overflow: visible;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes pulse {
+            from { 
+                box-shadow: 0 0 30px rgba(138, 43, 226, 0.6),
+                           0 0 60px rgba(75, 0, 130, 0.4);
+            }
+            to { 
+                box-shadow: 0 0 50px rgba(138, 43, 226, 0.9), 
+                           0 0 100px rgba(75, 0, 130, 0.7),
+                           0 0 150px rgba(138, 43, 226, 0.3);
+            }
+        }
+        
+        .supernova {
+            background: radial-gradient(circle at center,
+                #fff 0%,
+                #ffdd00 15%,
+                #ffaa00 30%,
+                #ff6600 50%,
+                #cc0000 70%,
+                transparent 85%);
+            animation: explode 3.5s ease-out infinite;
+        }
+        
+        @keyframes explode {
+            0% { 
+                transform: scale(0.1); 
+                opacity: 1; 
+                filter: brightness(2);
+            }
+            30% { 
+                transform: scale(0.8); 
+                opacity: 0.9;
+                filter: brightness(1.5);
+            }
+            70% { 
+                transform: scale(2); 
+                opacity: 0.6;
+                filter: brightness(1);
+            }
+            100% { 
+                transform: scale(3.5); 
+                opacity: 0;
+                filter: brightness(0.5);
+            }
+        }
+        
+        .planet {
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset -10px -10px 20px rgba(0,0,0,0.5);
+        }
+        
+        .planet-earth {
+            background: linear-gradient(135deg, #4a90e2 20%, #7fb069 40%, #4a90e2 60%, #2e7d32 80%);
+            animation: rotate-planet 30s linear infinite;
+        }
+        
+        .planet-mars {
+            background: linear-gradient(135deg, #cd5c5c 15%, #ff6347 45%, #8b4513 75%);
+            animation: rotate-planet 25s linear infinite reverse;
+        }
+        
+        .planet-jupiter {
+            background: linear-gradient(135deg, #daa520 10%, #f4a460 30%, #cd853f 50%, #daa520 70%, #f4a460 90%);
+            animation: rotate-planet 40s linear infinite;
+        }
+        
+        @keyframes rotate-planet {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .orbit {
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            animation: orbit 20s linear infinite;
+        }
+        
+        @keyframes orbit {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .cosmic-particle {
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(138, 43, 226, 0.3) 50%, transparent 70%);
+            animation: float 6s ease-in-out infinite alternate;
+        }
+        
+        @keyframes float {
+            from { 
+                transform: translateY(0px) rotateZ(0deg); 
+                opacity: 0.6;
+            }
+            to { 
+                transform: translateY(-25px) rotateZ(180deg); 
+                opacity: 1;
+            }
+        }
+        
+        .tab-content {
+            min-height: 70vh;
+        }
+        
+        .glow {
+            box-shadow: 0 0 25px rgba(93, 92, 222, 0.6);
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .glow:hover {
+            box-shadow: 0 0 35px rgba(93, 92, 222, 0.8);
+        }
+        
+        .text-glow {
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.6),
+                        0 0 30px rgba(138, 43, 226, 0.4);
+        }
+        
+        .accretion-disk {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 165, 0, 0.3);
+            animation: rotate 8s linear infinite;
+        }
+        
+        .info-card {
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.2);
+        }
+        
+        .tab-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .tab-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        @keyframes accretion {
+            0% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+                filter: brightness(1);
+            }
+            50% {
+                transform: scale(0.5) rotate(180deg);
+                opacity: 0.8;
+                filter: brightness(1.5);
+            }
+            100% {
+                transform: scale(0) rotate(360deg) translate(50%, 50%);
+                opacity: 0;
+                filter: brightness(2);
+            }
+        }
+        
+        .solar-system {
+            background: radial-gradient(ellipse at center, 
+                rgba(255, 255, 0, 0.1) 0%, 
+                transparent 30%);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen stars inter">
+    <div class="relative z-10">
+        <!-- Header -->
+        <header class="text-center py-8 px-4">
+            <h1 class="text-4xl md:text-6xl font-bold orbitron text-glow mb-4">
+                COSMOS EXPLORER
+            </h1>
+            <p class="text-gray-300 text-lg max-w-2xl mx-auto">
+                Explora los misterios del universo y descubre los fenómenos más fascinantes del cosmos
+            </p>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="flex justify-center mb-10 px-4">
+            <div class="bg-gray-800/60 backdrop-blur-lg rounded-full p-1.5 flex space-x-2 border border-gray-700/50">
+                <button onclick="showTab('blackhole')" id="tab-blackhole" class="tab-btn px-6 py-3 rounded-full text-sm font-medium transition-all duration-300">
+                    🕳️ Agujero Negro
+                </button>
+                <button onclick="showTab('supernova')" id="tab-supernova" class="tab-btn px-6 py-3 rounded-full text-sm font-medium transition-all duration-300">
+                    💥 Supernova
+                </button>
+                <button onclick="showTab('planets')" id="tab-planets" class="tab-btn px-6 py-3 rounded-full text-sm font-medium transition-all duration-300">
+                    🪐 Planetas
+                </button>
+            </div>
+        </nav>
+
+        <!-- Black Hole Section -->
+        <div id="blackhole-content" class="tab-content px-4">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl md:text-4xl font-bold orbitron mb-4">Agujero Negro</h2>
+                    <p class="text-gray-300 text-lg max-w-3xl mx-auto">
+                        Observa la fuerza gravitacional más poderosa del universo, donde el espacio y el tiempo se distorsionan
+                    </p>
+                </div>
+                
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="relative">
+                        <div class="black-hole w-72 h-72 mx-auto rounded-full relative">
+                            <div class="absolute inset-6 bg-black rounded-full border border-purple-900/30"></div>
+                            
+                            <!-- Discos de acreción -->
+                            <div class="accretion-disk w-40 h-40 top-1/2 left-1/2 -mt-20 -ml-20"></div>
+                            <div class="accretion-disk w-56 h-56 top-1/2 left-1/2 -mt-28 -ml-28" style="animation-duration: 12s; animation-direction: reverse;"></div>
+                            <div class="accretion-disk w-72 h-72 top-1/2 left-1/2 -mt-36 -ml-36" style="animation-duration: 18s;"></div>
+                            
+                            <!-- Partículas orbitando -->
+                            <div class="absolute top-1/2 left-1/2 w-32 h-32 -mt-16 -ml-16 border border-purple-500/40 rounded-full animate-spin" style="animation-duration: 3s;"></div>
+                            <div class="absolute top-1/2 left-1/2 w-48 h-48 -mt-24 -ml-24 border border-blue-500/20 rounded-full animate-spin" style="animation-duration: 5s; animation-direction: reverse;"></div>
+                        </div>
+                        
+                        <!-- Información científica -->
+                        <div class="mt-8 space-y-4">
+                            <div class="info-card bg-gray-800/50 backdrop-blur-sm rounded-xl p-5 border border-gray-700/50">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-purple-400 font-medium">Masa:</span>
+                                    <span class="orbitron text-lg">10¹⁰ M☉</span>
+                                </div>
+                            </div>
+                            <div class="info-card bg-gray-800/50 backdrop-blur-sm rounded-xl p-5 border border-gray-700/50">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-purple-400 font-medium">Radio de Schwarzschild:</span>
+                                    <span class="orbitron text-lg">30 km</span>
+                                </div>
+                            </div>
+                            <div class="info-card bg-gray-800/50 backdrop-blur-sm rounded-xl p-5 border border-gray-700/50">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-purple-400 font-medium">Temperatura del disco:</span>
+                                    <span class="orbitron text-lg">10⁷ K</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div class="info-card bg-gray-800/40 backdrop-blur-sm rounded-2xl p-8 border border-gray-700/50">
+                            <h3 class="text-2xl font-semibold text-purple-400 mb-4">¿Qué es un Agujero Negro?</h3>
+                            <p class="text-gray-300 leading-relaxed text-lg">
+                                Un agujero negro es una región del espacio-tiempo donde la gravedad es tan intensa que nada, ni siquiera la luz, puede escapar una vez que cruza el horizonte de eventos.
+                            </p>
+                        </div>
+                        
+                        <div class="info-card bg-gray-800/40 backdrop-blur-sm rounded-2xl p-8 border border-gray-700/50">
+                            <h3 class="text-2xl font-semibold text-purple-400 mb-4">Horizonte de Eventos</h3>
+                            <p class="text-gray-300 leading-relaxed text-lg">
+                                Es el punto de no retorno. Una vez que algo cruza esta frontera invisible, está condenado a caer hacia la singularidad central.
+                            </p>
+                        </div>
+                        
+                        <div class="info-card bg-gray-800/40 backdrop-blur-sm rounded-2xl p-8 border border-gray-700/50">
+                            <h3 class="text-2xl font-semibold text-purple-400 mb-4">Disco de Acreción</h3>
+                            <p class="text-gray-300 leading-relaxed text-lg">
+                                La materia que cae hacia el agujero negro forma un disco espiral brillante que puede alcanzar temperaturas de millones de grados.
+                            </p>
+                        </div>
+                        
+                        <button onclick="simulateAccretion()" class="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold py-4 px-8 rounded-xl transition-all duration-300 glow text-lg">
+                            🌌 Simular Acreción de Materia
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Supernova Section -->
+        <div id="supernova-content" class="tab-content px-4 hidden">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl md:text-4xl font-bold orbitron mb-4">Supernova</h2>
+                    <p class="text-gray-300 text-lg max-w-3xl mx-auto">
+                        Presencia la explosión más espectacular del cosmos, donde una estrella libera la energía de mil millones de soles
+                    </p>
+                </div>
+                
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="relative">
+                        <div id="supernova-container" class="relative w-80 h-80 mx-auto rounded-full solar-system">
+                            <div class="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full w-16 h-16 top-1/2 left-1/2 -mt-8 -ml-8 shadow-lg shadow-yellow-400/50"></div>
+                        </div>
+                        
+                        <div class="mt-8 grid grid-cols-2 gap-6">
+                            <div class="info-card bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 text-center border border-gray-700/50">
+                                <div class="text-2xl orbitron text-yellow-400 mb-2">Tipo Ia</div>
+                                <div class="text-sm text-gray-300">Enana Blanca</div>
+                                <div class="text-xs text-gray-400 mt-2">1.4 M☉</div>
+                            </div>
+                            <div class="info-card bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 text-center border border-gray-700/50">
+                                <div class="text-2xl orbitron text-red-400 mb-2">Tipo II</div>
+                                <div class="text-sm text-gray-300">Estrella Masiva</div>
+                                <div class="text-xs text-gray-400 mt-2">&gt; 8 M☉</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div class="info-card bg-gray-800/40 backdrop-blur-sm rounded-2xl p-8 border border-gray-700/50">
+                            <h3 class="text-2xl font-semibold text-yellow-400 mb-4">Explosión Estelar</h3>
+                            <p class="text-gray-300 leading-relaxed text-lg">
+                                Una supernova es la muerte explosiva de una estrella masiva, liberando en segundos más energía que nuestro Sol producirá en toda su existencia de 10 mil millones de años.
+                            </p>
+                        </div>
+                        
+                        <div class="info-card bg-gray-800/40 backdrop-blur-sm rounded-2xl p-8 border border-gray-700/50">
+                            <h3 class="text-2xl font-semibold text-yellow-400 mb-4">Nucleosíntesis</h3>
+                            <p class="text-gray-300 leading-relaxed text-lg">
+                                Las supernovas son fábricas cósmicas que forjan elementos pesados como hierro, oro y uranio, dispersándolos por el universo para formar nuevas estrellas y planetas.
+                            </p>
+                        </div>
+                        
+                        <div class="info-card bg-gray-800/40 backdrop-blur-sm rounded-2xl p-8 border border-gray-700/50">
+                            <h3 class="text-2xl font-semibold text-yellow-400 mb-4">Ondas de Choque</h3>
+                            <p class="text-gray-300 leading-relaxed text-lg">
+                                La explosión genera ondas de choque que viajan a miles de kilómetros por segundo, comprimiendo el gas interestelar y desencadenando la formación de nuevas estrellas.
+                            </p>
+                        </div>
+                        
+                        <button onclick="triggerSupernova()" class="w-full bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white font-semibold py-4 px-8 rounded-xl transition-all duration-300 glow text-lg">
+                            💥 Detonar Supernova
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Planets Section -->
+        <div id="planets-content" class="tab-content px-4 hidden">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl md:text-4xl font-bold orbitron mb-4">Sistema Solar</h2>
+                    <p class="text-gray-300 text-lg max-w-3xl mx-auto">
+                        Explora los mundos de nuestro vecindario cósmico y descubre las características únicas de cada planeta
+                    </p>
+                </div>
+                
+                <!-- Solar System Animation -->
+                <div class="relative w-full h-96 mb-12 overflow-hidden rounded-2xl bg-gray-900/60 backdrop-blur-sm border border-gray-700/50 solar-system">
+                    <!-- Sol -->
+                    <div class="absolute top-1/2 left-1/2 w-10 h-10 -mt-5 -ml-5 bg-gradient-to-r from-yellow-300 to-yellow-500 rounded-full shadow-lg shadow-yellow-400/60">
+                        <div class="absolute inset-1 bg-gradient-to-r from-yellow-200 to-yellow-400 rounded-full"></div>
+                    </div>
+                    
+                    <!-- Órbitas y Planetas -->
+                    <div class="orbit absolute top-1/2 left-1/2 w-28 h-28 -mt-14 -ml-14">
+                        <div class="planet planet-earth w-4 h-4 absolute -top-2 left-1/2 -ml-2"></div>
+                    </div>
+                    
+                    <div class="orbit absolute top-1/2 left-1/2 w-40 h-40 -mt-20 -ml-20" style="animation-duration: 25s;">
+                        <div class="planet planet-mars w-3 h-3 absolute -top-1.5 left-1/2 -ml-1.5"></div>
+                    </div>
+                    
+                    <div class="orbit absolute top-1/2 left-1/2 w-56 h-56 -mt-28 -ml-28" style="animation-duration: 35s;">
+                        <div class="planet planet-jupiter w-6 h-6 absolute -top-3 left-1/2 -ml-3"></div>
+                    </div>
+                </div>
+                
+                <!-- Planet Cards -->
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="info-card bg-gray-800/40 backdrop-blur-sm rounded-2xl p-8 border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300 cursor-pointer" onclick="showPlanetInfo('earth')">
+                        <div class="planet planet-earth w-20 h-20 mx-auto mb-6"></div>
+                        <h3 class="text-2xl font-semibold text-blue-400 text-center mb-3">Tierra</h3>
+                        <p class="text-gray-300 text-center leading-relaxed">
+                            El único planeta conocido con vida, hogar de millones de especies
+                        </p>
+                    </div>
+                    
+                    <div class="info-card bg-gray-800/40 backdrop-blur-sm rounded-2xl p-8 border border-gray-700/50 hover:border-red-500/50 transition-all duration-300 cursor-pointer" onclick="showPlanetInfo('mars')">
+                        <div class="planet planet-mars w-20 h-20 mx-auto mb-6"></div>
+                        <h3 class="text-2xl font-semibold text-red-400 text-center mb-3">Marte</h3>
+                        <p class="text-gray-300 text-center leading-relaxed">
+                            El planeta rojo, objetivo principal de la exploración espacial humana
+                        </p>
+                    </div>
+                    
+                    <div class="info-card bg-gray-800/40 backdrop-blur-sm rounded-2xl p-8 border border-gray-700/50 hover:border-yellow-500/50 transition-all duration-300 cursor-pointer" onclick="showPlanetInfo('jupiter')">
+                        <div class="planet planet-jupiter w-20 h-20 mx-auto mb-6"></div>
+                        <h3 class="text-2xl font-semibold text-yellow-400 text-center mb-3">Júpiter</h3>
+                        <p class="text-gray-300 text-center leading-relaxed">
+                            El gigante gaseoso que protege la Tierra de asteroides peligrosos
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Planet Info Modal -->
+        <div id="planet-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+            <div class="bg-gray-800/90 backdrop-blur-lg rounded-2xl p-8 max-w-lg w-full border border-gray-700/50">
+                <div id="planet-info"></div>
+                <button onclick="closePlanetInfo()" class="mt-6 w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+
+        <!-- Floating Cosmic Particles -->
+        <div class="fixed inset-0 pointer-events-none z-0">
+            <div class="cosmic-particle absolute top-16 left-12 w-2 h-2 rounded-full opacity-70"></div>
+            <div class="cosmic-particle absolute top-40 right-24 w-1 h-1 rounded-full opacity-50" style="animation-delay: -2s;"></div>
+            <div class="cosmic-particle absolute bottom-32 left-1/4 w-1.5 h-1.5 rounded-full opacity-80" style="animation-delay: -4s;"></div>
+            <div class="cosmic-particle absolute bottom-48 right-1/3 w-1 h-1 rounded-full opacity-60" style="animation-delay: -1s;"></div>
+            <div class="cosmic-particle absolute top-1/3 left-3/4 w-1.5 h-1.5 rounded-full opacity-70" style="animation-delay: -3s;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-purple-600', 'text-white', 'shadow-lg');
+                btn.classList.add('text-gray-300');
+            });
+            
+            // Show selected content
+            document.getElementById(tabName + '-content').classList.remove('hidden');
+            
+            // Activate selected tab
+            const activeTab = document.getElementById('tab-' + tabName);
+            activeTab.classList.add('bg-purple-600', 'text-white', 'shadow-lg');
+            activeTab.classList.remove('text-gray-300');
+        }
+
+        // Black hole simulation
+        function simulateAccretion() {
+            const blackHole = document.querySelector('.black-hole');
+            
+            // Create matter particles
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'absolute w-2 h-2 rounded-full';
+                
+                // Random particle colors
+                const colors = ['bg-orange-400', 'bg-yellow-300', 'bg-red-400', 'bg-purple-300'];
+                particle.classList.add(colors[Math.floor(Math.random() * colors.length)]);
+                
+                // Random starting position
+                const angle = Math.random() * 360;
+                const distance = 120 + Math.random() * 60;
+                const x = Math.cos(angle * Math.PI / 180) * distance;
+                const y = Math.sin(angle * Math.PI / 180) * distance;
+                
+                particle.style.left = `calc(50% + ${x}px)`;
+                particle.style.top = `calc(50% + ${y}px)`;
+                particle.style.animation = `accretion ${2 + Math.random() * 3}s ease-in forwards`;
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                
+                blackHole.appendChild(particle);
+                
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                }, 6000);
+            }
+        }
+
+        // Supernova simulation
+        function triggerSupernova() {
+            const container = document.getElementById('supernova-container');
+            container.innerHTML = '';
+            
+            // Create explosion layers with different timings
+            const explosionColors = [
+                'rgba(255, 255, 255, 0.9)',
+                'rgba(255, 221, 0, 0.8)',
+                'rgba(255, 170, 0, 0.7)',
+                'rgba(255, 102, 0, 0.6)',
+                'rgba(204, 0, 0, 0.5)'
+            ];
+            
+            explosionColors.forEach((color, i) => {
+                const explosion = document.createElement('div');
+                explosion.className = 'supernova absolute inset-0 rounded-full';
+                explosion.style.background = `radial-gradient(circle at center, ${color} 0%, transparent 70%)`;
+                explosion.style.animationDelay = i * 0.2 + 's';
+                container.appendChild(explosion);
+            });
+            
+            // Reset after animation
+            setTimeout(() => {
+                container.innerHTML = `
+                    <div class="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full w-16 h-16 top-1/2 left-1/2 -mt-8 -ml-8 shadow-lg shadow-yellow-400/50"></div>
+                `;
+            }, 4500);
+        }
+
+        // Planet info data
+        const planetData = {
+            earth: {
+                name: 'Tierra',
+                color: 'text-blue-400',
+                info: `
+                    <div class="space-y-4">
+                        <div><strong>Diámetro:</strong> 12,742 km</div>
+                        <div><strong>Distancia del Sol:</strong> 149.6 millones km</div>
+                        <div><strong>Lunas:</strong> 1 (Luna)</div>
+                        <div><strong>Día:</strong> 24 horas</div>
+                        <div><strong>Año:</strong> 365.25 días</div>
+                        <div><strong>Características:</strong> Océanos líquidos (71% de la superficie), atmósfera rica en oxígeno (21%), vida abundante con más de 8 millones de especies conocidas.</div>
+                    </div>
+                `
+            },
+            mars: {
+                name: 'Marte',
+                color: 'text-red-400',
+                info: `
+                    <div class="space-y-4">
+                        <div><strong>Diámetro:</strong> 6,779 km</div>
+                        <div><strong>Distancia del Sol:</strong> 227.9 millones km</div>
+                        <div><strong>Lunas:</strong> 2 (Fobos y Deimos)</div>
+                        <div><strong>Día:</strong> 24.6 horas</div>
+                        <div><strong>Año:</strong> 687 días terrestres</div>
+                        <div><strong>Características:</strong> Casquetes polares de hielo seco y agua, el monte más alto del sistema solar (Olympus Mons), cañones profundos, evidencia de agua líquida en el pasado.</div>
+                    </div>
+                `
+            },
+            jupiter: {
+                name: 'Júpiter',
+                color: 'text-yellow-400',
+                info: `
+                    <div class="space-y-4">
+                        <div><strong>Diámetro:</strong> 139,820 km</div>
+                        <div><strong>Distancia del Sol:</strong> 778.5 millones km</div>
+                        <div><strong>Lunas:</strong> 95+ conocidas (incluyendo Io, Europa, Ganímedes y Calisto)</div>
+                        <div><strong>Día:</strong> 9.9 horas</div>
+                        <div><strong>Año:</strong> 11.8 años terrestres</div>
+                        <div><strong>Características:</strong> Gran Mancha Roja (tormenta gigante), anillos tenues, composición principalmente de hidrógeno y helio, actúa como "aspiradora cósmica" protegiendo la Tierra.</div>
+                    </div>
+                `
+            }
+        };
+
+        function showPlanetInfo(planet) {
+            const modal = document.getElementById('planet-modal');
+            const info = document.getElementById('planet-info');
+            const data = planetData[planet];
+            
+            info.innerHTML = `
+                <h3 class="text-3xl font-bold ${data.color} mb-6">${data.name}</h3>
+                <div class="text-gray-300 leading-relaxed">${data.info}</div>
+            `;
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closePlanetInfo() {
+            const modal = document.getElementById('planet-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('planet-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePlanetInfo();
+            }
+        });
+
+        // Initialize
+        showTab('blackhole');
+
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+</body>
+</html>
