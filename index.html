@@ -2,7 +2,7 @@
 <html lang="es" class="h-full">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Portal de Aplicaciones Interactivas</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -16,23 +16,13 @@
                         cosmic: '#4ECDC4'
                     },
                     animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                        'glow': 'glow 2s ease-in-out infinite alternate',
-                        'slide-up': 'slideUp 0.8s ease-out',
-                        'fade-in': 'fadeIn 1s ease-out',
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+                        'fade-in': 'fadeIn 0.8s ease-out',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'pulse-slow': 'pulse 3s ease-in-out infinite'
                     },
                     keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0px)' },
-                            '50%': { transform: 'translateY(-20px)' }
-                        },
-                        glow: {
-                            '0%': { boxShadow: '0 0 20px rgba(93, 92, 222, 0.3)' },
-                            '100%': { boxShadow: '0 0 40px rgba(93, 92, 222, 0.8)' }
-                        },
                         slideUp: {
-                            '0%': { opacity: '0', transform: 'translateY(50px)' },
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
                             '100%': { opacity: '1', transform: 'translateY(0)' }
                         },
                         fadeIn: {
@@ -45,26 +35,34 @@
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
         
         .font-orbitron { font-family: 'Orbitron', monospace; }
         .font-inter { font-family: 'Inter', sans-serif; }
         
         .glass-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
         
         .dark .glass-card {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
         
         .gradient-bg {
-            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+        }
+        
+        /* Solo animación de gradiente en desktop */
+        @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+            .gradient-bg {
+                background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c);
+                background-size: 300% 300%;
+                animation: gradientShift 25s ease infinite;
+            }
         }
         
         @keyframes gradientShift {
@@ -74,52 +72,58 @@
         }
         
         .card-hover {
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            will-change: transform, box-shadow;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            will-change: auto;
         }
         
-        .card-hover:hover {
-            transform: translateY(-12px) scale(1.03);
-            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.35);
+        /* Solo efectos hover en desktop */
+        @media (min-width: 768px) and (hover: hover) {
+            .card-hover:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            }
         }
         
+        /* Efectos táctiles optimizados para móvil */
         .card-hover:active {
-            transform: translateY(-8px) scale(1.01);
-            transition: all 0.1s ease;
+            transform: scale(0.98);
+            transition: transform 0.1s ease;
         }
         
         .btn-primary {
             background: linear-gradient(135deg, #5D5CDE, #4a49b1);
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            will-change: transform, box-shadow, background;
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
         
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-        
-        .btn-primary:hover::before {
-            left: 100%;
-        }
-        
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #4a49b1, #3d3a8f);
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 15px 35px rgba(93, 92, 222, 0.5);
-        }
-        
         .btn-primary:active {
-            transform: translateY(-1px) scale(0.98);
-            transition: all 0.1s ease;
+            transform: scale(0.95);
+            transition: transform 0.1s ease;
+        }
+        
+        /* Solo efectos hover en desktop */
+        @media (min-width: 768px) and (hover: hover) {
+            .btn-primary::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+                transition: left 0.5s;
+            }
+            
+            .btn-primary:hover::before {
+                left: 100%;
+            }
+            
+            .btn-primary:hover {
+                background: linear-gradient(135deg, #4a49b1, #3d3a8f);
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(93, 92, 222, 0.4);
+            }
         }
         
         .category-badge {
@@ -134,25 +138,31 @@
             letter-spacing: 0.05em;
         }
         
-        .floating-element {
-            position: absolute;
-            border-radius: 50%;
-            opacity: 0.1;
-            animation: float 8s ease-in-out infinite;
-            will-change: transform;
-            filter: blur(1px);
-        }
-        
-        .smooth-scroll {
-            scroll-behavior: smooth;
-        }
-        
+        /* Optimizaciones para móviles */
         * {
             -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
         }
         
         body {
             -webkit-overflow-scrolling: touch;
+            touch-action: manipulation;
+        }
+        
+        /* Reducir motion en dispositivos que lo prefieren */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* Optimización de fonts para móviles */
+        @media (max-width: 767px) {
+            .font-orbitron {
+                font-weight: 700;
+            }
         }
     </style>
 </head>
@@ -171,254 +181,246 @@
         });
     </script>
 
-    <!-- Floating background elements -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div class="floating-element w-72 h-72 bg-primary top-1/4 left-1/4" style="animation-delay: 0s;"></div>
-        <div class="floating-element w-96 h-96 bg-accent top-3/4 right-1/4" style="animation-delay: 2s;"></div>
-        <div class="floating-element w-64 h-64 bg-secondary top-1/2 right-1/3" style="animation-delay: 4s;"></div>
-    </div>
-
-    <!-- Header -->
-    <header class="relative z-10 text-center py-12 px-4">
+    <!-- Header optimizado -->
+    <header class="relative z-10 text-center py-8 md:py-12 px-4">
         <div class="max-w-6xl mx-auto">
-            <h1 class="font-orbitron text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 animate-fade-in">
+            <h1 class="font-orbitron text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 md:mb-6 animate-fade-in">
                 <span class="bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent">
                     PORTAL INTERACTIVO
                 </span>
             </h1>
-            <p class="text-xl md:text-2xl text-white/80 mb-8 max-w-3xl mx-auto leading-relaxed">
-                Descubre una colección de aplicaciones innovadoras: desde exploración cósmica hasta inteligencia artificial, 
-                cada experiencia diseñada para sorprenderte y entretenerte.
+            <p class="text-lg md:text-xl text-white/80 mb-6 md:mb-8 max-w-3xl mx-auto leading-relaxed px-2">
+                Descubre aplicaciones innovadoras: desde exploración cósmica hasta inteligencia artificial, 
+                cada experiencia diseñada para sorprenderte.
             </p>
-            <div class="flex flex-wrap justify-center gap-4 text-sm md:text-base">
+            <div class="flex flex-wrap justify-center gap-2 md:gap-4 text-xs md:text-sm">
                 <span class="category-badge bg-white/20 text-white">
-                    🎮 8 Aplicaciones Únicas
+                    🎮 8 Apps Únicas
                 </span>
                 <span class="category-badge bg-white/20 text-white">
-                    📱 Completamente Responsivas
+                    📱 100% Móvil
                 </span>
                 <span class="category-badge bg-white/20 text-white">
-                    ✨ Tecnología Avanzada
+                    ✨ Ultra Fluidas
                 </span>
             </div>
         </div>
     </header>
 
-    <!-- Applications Grid -->
-    <main class="relative z-10 max-w-7xl mx-auto px-4 pb-16">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <!-- Applications Grid optimizado -->
+    <main class="relative z-10 max-w-7xl mx-auto px-3 md:px-4 pb-12 md:pb-16">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
             
             <!-- Cosmos Explorer -->
-            <div class="glass-card rounded-2xl p-6 card-hover animate-slide-up" style="animation-delay: 0.1s;">
+            <div class="glass-card rounded-xl md:rounded-2xl p-4 md:p-6 card-hover animate-slide-up" style="animation-delay: 0.1s;">
                 <div class="text-center mb-4">
-                    <div class="text-6xl mb-4 animate-pulse-slow">🌌</div>
-                    <h3 class="font-orbitron text-xl font-bold text-white mb-2">Cosmos Explorer</h3>
-                    <span class="category-badge bg-gradient-to-r from-purple-500 to-blue-500 text-white">
+                    <div class="text-4xl md:text-6xl mb-3 md:mb-4">🌌</div>
+                    <h3 class="font-orbitron text-lg md:text-xl font-bold text-white mb-2">Cosmos Explorer</h3>
+                    <span class="category-badge bg-gradient-to-r from-purple-500 to-blue-500 text-white text-xs">
                         🔭 Exploración Espacial
                     </span>
                 </div>
                 <p class="text-white/80 text-sm mb-4 leading-relaxed">
-                    Embárcate en un viaje fascinante por el universo. Explora agujeros negros, presencia supernovas y descubre planetas con visualizaciones interactivas espectaculares.
+                    Viaja por el universo. Explora agujeros negros, supernovas y planetas con visualizaciones interactivas.
                 </p>
                 <div class="bg-white/10 rounded-lg p-3 mb-4">
                     <h4 class="text-white font-semibold text-sm mb-2">📋 Cómo usar:</h4>
                     <ul class="text-white/70 text-xs space-y-1">
-                        <li>• Navega entre las pestañas: Agujero Negro, Supernova, Planetas</li>
-                        <li>• Haz clic en "Simular Acreción de Materia" para ver efectos</li>
-                        <li>• Detona una supernova y observa la explosión</li>
-                        <li>• Explora información detallada de cada planeta</li>
+                        <li>• Navega entre pestañas: Agujero Negro, Supernova, Planetas</li>
+                        <li>• Simula acreción de materia y explosiones</li>
+                        <li>• Explora información de cada planeta</li>
                     </ul>
                 </div>
-                <button onclick="window.open('blackhole.html', '_blank')" 
+                <button onclick="openApp('blackhole.html')" 
                         class="w-full btn-primary text-white font-semibold py-3 px-4 rounded-xl text-base">
                     🚀 Explorar Cosmos
                 </button>
             </div>
 
             <!-- Garden Harmony -->
-            <div class="glass-card rounded-2xl p-6 card-hover animate-slide-up" style="animation-delay: 0.2s;">
+            <div class="glass-card rounded-xl md:rounded-2xl p-4 md:p-6 card-hover animate-slide-up" style="animation-delay: 0.2s;">
                 <div class="text-center mb-4">
-                    <div class="text-6xl mb-4 animate-pulse-slow">🌸</div>
-                    <h3 class="font-orbitron text-xl font-bold text-white mb-2">Garden Harmony</h3>
-                    <span class="category-badge bg-gradient-to-r from-green-500 to-teal-500 text-white">
+                    <div class="text-4xl md:text-6xl mb-3 md:mb-4">🌸</div>
+                    <h3 class="font-orbitron text-lg md:text-xl font-bold text-white mb-2">Garden Harmony</h3>
+                    <span class="category-badge bg-gradient-to-r from-green-500 to-teal-500 text-white text-xs">
                         🧩 Puzzle Ecológico
                     </span>
                 </div>
                 <p class="text-white/80 text-sm mb-4 leading-relaxed">
-                    Crea ecosistemas perfectos conectando flores, insectos y animales. Un puzzle inteligente que te enseña sobre cadenas alimentarias de forma divertida.
+                    Crea ecosistemas perfectos conectando flores, insectos y animales. Un puzzle que enseña sobre la naturaleza.
                 </p>
                 <div class="bg-white/10 rounded-lg p-3 mb-4">
                     <h4 class="text-white font-semibold text-sm mb-2">📋 Cómo jugar:</h4>
                     <ul class="text-white/70 text-xs space-y-1">
-                        <li>• Comienza siempre con una flor</li>
-                        <li>• Conecta insectos que se alimenten de esa flor</li>
-                        <li>• Agrega animales que coman esos insectos</li>
-                        <li>• Completa 3 cadenas para ganar el nivel</li>
+                        <li>• Comienza con una flor</li>
+                        <li>• Conecta insectos que se alimenten</li>
+                        <li>• Agrega animales en la cadena</li>
+                        <li>• Completa 3 cadenas para ganar</li>
                     </ul>
                 </div>
-                <button onclick="window.open('jardin.html', '_blank')" 
+                <button onclick="openApp('jardin.html')" 
                         class="w-full btn-primary text-white font-semibold py-3 px-4 rounded-xl text-base">
                     🌿 Crear Ecosistema
                 </button>
             </div>
 
             <!-- AI Neural Trainer -->
-            <div class="glass-card rounded-2xl p-6 card-hover animate-slide-up" style="animation-delay: 0.3s;">
+            <div class="glass-card rounded-xl md:rounded-2xl p-4 md:p-6 card-hover animate-slide-up" style="animation-delay: 0.3s;">
                 <div class="text-center mb-4">
-                    <div class="text-6xl mb-4 animate-pulse-slow">🧠</div>
-                    <h3 class="font-orbitron text-xl font-bold text-white mb-2">AI Neural Trainer</h3>
-                    <span class="category-badge bg-gradient-to-r from-cyan-500 to-blue-500 text-white">
+                    <div class="text-4xl md:text-6xl mb-3 md:mb-4">🧠</div>
+                    <h3 class="font-orbitron text-lg md:text-xl font-bold text-white mb-2">AI Neural Trainer</h3>
+                    <span class="category-badge bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-xs">
                         🤖 Inteligencia Artificial
                     </span>
                 </div>
                 <p class="text-white/80 text-sm mb-4 leading-relaxed">
-                    Simula ser una IA en entrenamiento. Resuelve desafíos de reconocimiento de patrones, clasificación de datos y memoria para evolucionar tu inteligencia.
+                    Simula ser una IA en entrenamiento. Resuelve patrones, clasifica datos y ejercita tu memoria.
                 </p>
                 <div class="bg-white/10 rounded-lg p-3 mb-4">
-                    <h4 class="text-white font-semibold text-sm mb-2">📋 Cómo entrenar:</h4>
+                    <h4 class="text-white font-semibold text-sm mb-2">📋 Entrenamientos:</h4>
                     <ul class="text-white/70 text-xs space-y-1">
-                        <li>• Resuelve patrones lógicos en 30 segundos</li>
-                        <li>• Clasifica datos de red correctamente</li>
-                        <li>• Memoriza y repite secuencias</li>
-                        <li>• Aumenta tu IQ con cada respuesta correcta</li>
+                        <li>• Patrones lógicos en 30 segundos</li>
+                        <li>• Clasificación de datos</li>
+                        <li>• Memoriza secuencias</li>
+                        <li>• Aumenta tu IQ artificial</li>
                     </ul>
                 </div>
-                <button onclick="window.open('ia.html', '_blank')" 
+                <button onclick="openApp('ia.html')" 
                         class="w-full btn-primary text-white font-semibold py-3 px-4 rounded-xl text-base">
                     🚀 Entrenar IA
                 </button>
             </div>
 
             <!-- Dino Street Crossing -->
-            <div class="glass-card rounded-2xl p-6 card-hover animate-slide-up" style="animation-delay: 0.4s;">
+            <div class="glass-card rounded-xl md:rounded-2xl p-4 md:p-6 card-hover animate-slide-up" style="animation-delay: 0.4s;">
                 <div class="text-center mb-4">
-                    <div class="text-6xl mb-4 animate-pulse-slow">🦕</div>
-                    <h3 class="font-orbitron text-xl font-bold text-white mb-2">Dino Street Crossing</h3>
-                    <span class="category-badge bg-gradient-to-r from-orange-500 to-red-500 text-white">
-                        🎮 Juego de Arcade
+                    <div class="text-4xl md:text-6xl mb-3 md:mb-4">🦕</div>
+                    <h3 class="font-orbitron text-lg md:text-xl font-bold text-white mb-2">Dino Street Crossing</h3>
+                    <span class="category-badge bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs">
+                        🎮 Juego Arcade
                     </span>
                 </div>
                 <p class="text-white/80 text-sm mb-4 leading-relaxed">
-                    Ayuda al adorable dinosaurio a cruzar calles llenas de tráfico. Un juego adictivo estilo Frogger optimizado para móviles con controles táctiles perfectos.
+                    Ayuda al dino a cruzar calles con tráfico. Juego estilo Frogger optimizado para controles táctiles.
                 </p>
                 <div class="bg-white/10 rounded-lg p-3 mb-4">
-                    <h4 class="text-white font-semibold text-sm mb-2">📋 Cómo jugar:</h4>
+                    <h4 class="text-white font-semibold text-sm mb-2">📋 Controles:</h4>
                     <ul class="text-white/70 text-xs space-y-1">
-                        <li>• Usa los botones de dirección para mover al dino</li>
-                        <li>• Evita ser atropellado por los vehículos</li>
-                        <li>• Recolecta power-ups para ventajas especiales</li>
-                        <li>• Llega al final de cada nivel sin perder todas las vidas</li>
+                        <li>• Botones de dirección para mover</li>
+                        <li>• Evita los vehículos</li>
+                        <li>• Recolecta power-ups</li>
+                        <li>• Llega al final del nivel</li>
                     </ul>
                 </div>
-                <button onclick="window.open('dino.html', '_blank')" 
+                <button onclick="openApp('dino.html')" 
                         class="w-full btn-primary text-white font-semibold py-3 px-4 rounded-xl text-base">
                     🏃‍♂️ Jugar Ahora
                 </button>
             </div>
 
             <!-- Calculadora Profesional -->
-            <div class="glass-card rounded-2xl p-6 card-hover animate-slide-up" style="animation-delay: 0.5s;">
+            <div class="glass-card rounded-xl md:rounded-2xl p-4 md:p-6 card-hover animate-slide-up" style="animation-delay: 0.5s;">
                 <div class="text-center mb-4">
-                    <div class="text-6xl mb-4 animate-pulse-slow">📊</div>
-                    <h3 class="font-orbitron text-xl font-bold text-white mb-2">Calculadora Pro</h3>
-                    <span class="category-badge bg-gradient-to-r from-indigo-500 to-purple-500 text-white">
+                    <div class="text-4xl md:text-6xl mb-3 md:mb-4">📊</div>
+                    <h3 class="font-orbitron text-lg md:text-xl font-bold text-white mb-2">Calculadora Pro</h3>
+                    <span class="category-badge bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-xs">
                         🔢 Herramienta Educativa
                     </span>
                 </div>
                 <p class="text-white/80 text-sm mb-4 leading-relaxed">
-                    Más que una calculadora: una herramienta educativa que muestra paso a paso cómo se resuelven las operaciones, perfecta para aprender matemáticas.
+                    Calculadora educativa que muestra paso a paso cómo resolver operaciones matemáticas.
                 </p>
                 <div class="bg-white/10 rounded-lg p-3 mb-4">
-                    <h4 class="text-white font-semibold text-sm mb-2">📋 Características:</h4>
+                    <h4 class="text-white font-semibold text-sm mb-2">📋 Funciones:</h4>
                     <ul class="text-white/70 text-xs space-y-1">
-                        <li>• Operaciones básicas y avanzadas (sin, cos, √)</li>
-                        <li>• Explicación detallada paso a paso</li>
-                        <li>• Historial de cálculos guardados</li>
-                        <li>• Modo oscuro/claro automático</li>
+                        <li>• Operaciones básicas y avanzadas</li>
+                        <li>• Explicaciones paso a paso</li>
+                        <li>• Historial de cálculos</li>
+                        <li>• Modo oscuro automático</li>
                     </ul>
                 </div>
-                <button onclick="window.open('calculadora.html', '_blank')" 
+                <button onclick="openApp('calculadora.html')" 
                         class="w-full btn-primary text-white font-semibold py-3 px-4 rounded-xl text-base">
                     🧮 Calcular
                 </button>
             </div>
 
             <!-- Stellar Collector -->
-            <div class="glass-card rounded-2xl p-6 card-hover animate-slide-up" style="animation-delay: 0.6s;">
+            <div class="glass-card rounded-xl md:rounded-2xl p-4 md:p-6 card-hover animate-slide-up" style="animation-delay: 0.6s;">
                 <div class="text-center mb-4">
-                    <div class="text-6xl mb-4 animate-pulse-slow">⭐</div>
-                    <h3 class="font-orbitron text-xl font-bold text-white mb-2">Stellar Collector</h3>
-                    <span class="category-badge bg-gradient-to-r from-yellow-500 to-orange-500 text-white">
+                    <div class="text-4xl md:text-6xl mb-3 md:mb-4">⭐</div>
+                    <h3 class="font-orbitron text-lg md:text-xl font-bold text-white mb-2">Stellar Collector</h3>
+                    <span class="category-badge bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs">
                         🚀 Juego Espacial
                     </span>
                 </div>
                 <p class="text-white/80 text-sm mb-4 leading-relaxed">
-                    Pilota tu nave espacial recolectando estrellas y evitando agujeros negros. Un juego espacial fluido con controles táctiles y efectos visuales impresionantes.
+                    Pilota tu nave recolectando estrellas y evitando agujeros negros. Controles táctiles fluidos.
                 </p>
                 <div class="bg-white/10 rounded-lg p-3 mb-4">
                     <h4 class="text-white font-semibold text-sm mb-2">📋 Controles:</h4>
                     <ul class="text-white/70 text-xs space-y-1">
-                        <li>• Mueve el dedo por la pantalla para controlar la nave</li>
-                        <li>• Recolecta estrellas (10 pts) y planetas (50 pts)</li>
-                        <li>• Usa escudo y boost con los botones especiales</li>
-                        <li>• Evita los agujeros negros a toda costa</li>
+                        <li>• Desliza para controlar la nave</li>
+                        <li>• Estrellas (10 pts) y planetas (50 pts)</li>
+                        <li>• Usa escudo y boost</li>
+                        <li>• Evita agujeros negros</li>
                     </ul>
                 </div>
-                <button onclick="window.open('astronomy.html', '_blank')" 
+                <button onclick="openApp('astronomy.html')" 
                         class="w-full btn-primary text-white font-semibold py-3 px-4 rounded-xl text-base">
                     🌟 Volar Ahora
                 </button>
             </div>
 
             <!-- Adivino Tu Número -->
-            <div class="glass-card rounded-2xl p-6 card-hover animate-slide-up" style="animation-delay: 0.7s;">
+            <div class="glass-card rounded-xl md:rounded-2xl p-4 md:p-6 card-hover animate-slide-up" style="animation-delay: 0.7s;">
                 <div class="text-center mb-4">
-                    <div class="text-6xl mb-4 animate-pulse-slow">🔮</div>
-                    <h3 class="font-orbitron text-xl font-bold text-white mb-2">Adivino Tu Número</h3>
-                    <span class="category-badge bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+                    <div class="text-4xl md:text-6xl mb-3 md:mb-4">🔮</div>
+                    <h3 class="font-orbitron text-lg md:text-xl font-bold text-white mb-2">Adivino Tu Número</h3>
+                    <span class="category-badge bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs">
                         🎭 Entretenimiento
                     </span>
                 </div>
                 <p class="text-white/80 text-sm mb-4 leading-relaxed">
-                    Una experiencia mágica e interactiva donde la "IA" lee tu mente y adivina el número que pensaste. Perfecto para sorprender a amigos y familiares.
+                    Experiencia mágica donde la "IA" lee tu mente y adivina tu número. ¡Sorprende a todos!
                 </p>
                 <div class="bg-white/10 rounded-lg p-3 mb-4">
                     <h4 class="text-white font-semibold text-sm mb-2">📋 Cómo funciona:</h4>
                     <ul class="text-white/70 text-xs space-y-1">
-                        <li>• Piensa en un número del 1 al 20</li>
-                        <li>• Ingresa tu número en el campo</li>
-                        <li>• Observa el proceso de "análisis mental"</li>
+                        <li>• Piensa un número del 1 al 20</li>
+                        <li>• Ingresa tu número secreto</li>
+                        <li>• Observa el análisis mental</li>
                         <li>• ¡Sorpréndete con la respuesta!</li>
                     </ul>
                 </div>
-                <button onclick="window.open('adivino.html', '_blank')" 
+                <button onclick="openApp('adivino.html')" 
                         class="w-full btn-primary text-white font-semibold py-3 px-4 rounded-xl text-base">
                     🧙‍♂️ Leer Mente
                 </button>
             </div>
 
             <!-- PlantCare -->
-            <div class="glass-card rounded-2xl p-6 card-hover animate-slide-up" style="animation-delay: 0.8s;">
+            <div class="glass-card rounded-xl md:rounded-2xl p-4 md:p-6 card-hover animate-slide-up" style="animation-delay: 0.8s;">
                 <div class="text-center mb-4">
-                    <div class="text-6xl mb-4 animate-pulse-slow">🌱</div>
-                    <h3 class="font-orbitron text-xl font-bold text-white mb-2">PlantCare</h3>
-                    <span class="category-badge bg-gradient-to-r from-green-500 to-emerald-500 text-white">
+                    <div class="text-4xl md:text-6xl mb-3 md:mb-4">🌱</div>
+                    <h3 class="font-orbitron text-lg md:text-xl font-bold text-white mb-2">PlantCare</h3>
+                    <span class="category-badge bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs">
                         💚 Simulación de Vida
                     </span>
                 </div>
                 <p class="text-white/80 text-sm mb-4 leading-relaxed">
-                    Cuida una planta virtual por 2 minutos y observa cómo florece con tus cuidados. Una experiencia relajante que enseña sobre responsabilidad y paciencia.
+                    Cuida una planta virtual por 2 minutos. Experiencia relajante que enseña responsabilidad.
                 </p>
                 <div class="bg-white/10 rounded-lg p-3 mb-4">
-                    <h4 class="text-white font-semibold text-sm mb-2">📋 Cuidados necesarios:</h4>
+                    <h4 class="text-white font-semibold text-sm mb-2">📋 Cuidados:</h4>
                     <ul class="text-white/70 text-xs space-y-1">
-                        <li>• Riega cuando la barra de agua baje</li>
-                        <li>• Ajusta la luz solar según las necesidades</li>
-                        <li>• Usa fertilizante para acelerar el crecimiento</li>
-                        <li>• Habla con tu planta para darle ánimo</li>
+                        <li>• Riega cuando baje el agua</li>
+                        <li>• Ajusta la luz solar</li>
+                        <li>• Usa fertilizante para crecer</li>
+                        <li>• Habla con tu planta</li>
                     </ul>
                 </div>
-                <button onclick="window.open('planta.html', '_blank')" 
+                <button onclick="openApp('planta.html')" 
                         class="w-full btn-primary text-white font-semibold py-3 px-4 rounded-xl text-base">
                     🌿 Cuidar Planta
                 </button>
@@ -426,165 +428,135 @@
 
         </div>
 
-        <!-- Statistics Section -->
-        <div class="mt-16 glass-card rounded-2xl p-8 text-center">
-            <h2 class="font-orbitron text-3xl font-bold text-white mb-8">Estadísticas del Portal</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <!-- Statistics Section optimizado -->
+        <div class="mt-12 md:mt-16 glass-card rounded-xl md:rounded-2xl p-6 md:p-8 text-center">
+            <h2 class="font-orbitron text-2xl md:text-3xl font-bold text-white mb-6 md:mb-8">Estadísticas del Portal</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
                 <div class="text-center">
-                    <div class="text-4xl font-bold text-primary mb-2">8</div>
-                    <div class="text-white/70 text-sm">Aplicaciones Únicas</div>
+                    <div class="text-3xl md:text-4xl font-bold text-primary mb-2">8</div>
+                    <div class="text-white/70 text-xs md:text-sm">Apps Únicas</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-4xl font-bold text-secondary mb-2">100%</div>
-                    <div class="text-white/70 text-sm">Responsivas</div>
+                    <div class="text-3xl md:text-4xl font-bold text-secondary mb-2">100%</div>
+                    <div class="text-white/70 text-xs md:text-sm">Responsivas</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-4xl font-bold text-accent mb-2">0</div>
-                    <div class="text-white/70 text-sm">Instalación Requerida</div>
+                    <div class="text-3xl md:text-4xl font-bold text-accent mb-2">0</div>
+                    <div class="text-white/70 text-xs md:text-sm">Instalación</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-4xl font-bold text-cosmic mb-2">∞</div>
-                    <div class="text-white/70 text-sm">Horas de Diversión</div>
+                    <div class="text-3xl md:text-4xl font-bold text-cosmic mb-2">∞</div>
+                    <div class="text-white/70 text-xs md:text-sm">Diversión</div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="relative z-10 text-center py-8 px-4 mt-16">
-        <div class="glass-card rounded-xl p-6 max-w-4xl mx-auto">
+    <!-- Footer optimizado -->
+    <footer class="relative z-10 text-center py-6 md:py-8 px-4 mt-12 md:mt-16">
+        <div class="glass-card rounded-xl p-4 md:p-6 max-w-4xl mx-auto">
             <p class="text-white/80 text-lg mb-4">
-                🚀 <strong>Portal Interactivo</strong> - Una colección curada de experiencias web innovadoras
+                🚀 <strong>Portal Interactivo</strong> - Experiencias web optimizadas para móviles
             </p>
             <p class="text-white/60 text-sm">
-                Cada aplicación está optimizada para dispositivos móviles y de escritorio • 
-                Tecnologías modernas • Experiencias inmersivas
+                Ultra fluidas • Completamente táctiles • Tecnologías modernas
             </p>
-            <div class="mt-6 flex flex-wrap justify-center gap-4 text-sm">
+            <div class="mt-4 md:mt-6 flex flex-wrap justify-center gap-2 md:gap-4 text-xs">
                 <span class="category-badge bg-white/10 text-white/70">HTML5</span>
                 <span class="category-badge bg-white/10 text-white/70">CSS3</span>
                 <span class="category-badge bg-white/10 text-white/70">JavaScript</span>
-                <span class="category-badge bg-white/10 text-white/70">TailwindCSS</span>
-                <span class="category-badge bg-white/10 text-white/70">Canvas API</span>
+                <span class="category-badge bg-white/10 text-white/70">Tailwind</span>
             </div>
         </div>
     </footer>
 
     <script>
-        // Animaciones de entrada escalonadas mejoradas
+        // Función optimizada para abrir aplicaciones
+        function openApp(url) {
+            // Feedback táctil inmediato
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+            
+            // Abrir directamente sin overlay para mejor rendimiento
+            try {
+                window.open(url, '_blank', 'noopener,noreferrer');
+            } catch (e) {
+                // Fallback para algunos navegadores móviles
+                location.href = url;
+            }
+        }
+
+        // Animaciones de entrada optimizadas
         const cards = document.querySelectorAll('.animate-slide-up');
         
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -30px 0px'
-        };
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0) scale(1)';
-                    }, index * 100);
-                }
-            });
-        }, observerOptions);
-        
-        cards.forEach((card, index) => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(40px) scale(0.95)';
-            card.style.transition = 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-            card.style.willChange = 'transform, opacity';
-            observer.observe(card);
-        });
-
-        // Efecto parallax optimizado con requestAnimationFrame
-        let ticking = false;
-        
-        function updateParallax() {
-            const scrolled = window.pageYOffset;
-            const elements = document.querySelectorAll('.floating-element');
-            
-            elements.forEach((element, index) => {
-                const speed = 0.3 + index * 0.1;
-                const yPos = scrolled * speed;
-                element.style.transform = `translate3d(0, ${yPos}px, 0) rotate(${scrolled * 0.05}deg)`;
+        // Usar IntersectionObserver solo si está disponible
+        if ('IntersectionObserver' in window) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }, index * 80); // Reducido para más fluidez
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -20px 0px'
             });
             
-            ticking = false;
+            cards.forEach((card) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'all 0.5s ease-out';
+                observer.observe(card);
+            });
+        } else {
+            // Fallback para navegadores sin IntersectionObserver
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 80);
+            });
         }
-        
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                requestAnimationFrame(updateParallax);
-                ticking = true;
+
+        // Optimización de rendimiento: prevenir scroll bounce en iOS
+        document.addEventListener('touchmove', function(e) {
+            if (e.target.closest('.card-hover') || e.target.closest('.btn-primary')) {
+                return;
             }
+        }, { passive: true });
+
+        // Optimización de memoria: limpiar eventos en blur
+        window.addEventListener('blur', function() {
+            // Pausar animaciones cuando la app no está en foco
+            document.body.style.animationPlayState = 'paused';
         });
 
-        // Función para abrir aplicaciones con efecto de transición
-        function openApp(url) {
-            const overlay = document.createElement('div');
-            overlay.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center';
-            overlay.innerHTML = `
-                <div class="text-center text-white">
-                    <div class="text-6xl mb-4 animate-spin">🚀</div>
-                    <p class="text-xl">Cargando aplicación...</p>
-                </div>
-            `;
-            
-            document.body.appendChild(overlay);
-            
-            setTimeout(() => {
-                window.open(url, '_blank');
-                document.body.removeChild(overlay);
-            }, 1000);
+        window.addEventListener('focus', function() {
+            // Reanudar animaciones cuando vuelve el foco
+            document.body.style.animationPlayState = 'running';
+        });
+
+        // Precarga de recursos críticos solo en desktop
+        if (window.innerWidth >= 768 && 'requestIdleCallback' in window) {
+            requestIdleCallback(() => {
+                // Precarga las páginas principales
+                ['blackhole.html', 'jardin.html', 'ia.html', 'dino.html'].forEach(url => {
+                    const link = document.createElement('link');
+                    link.rel = 'prefetch';
+                    link.href = url;
+                    document.head.appendChild(link);
+                });
+            });
         }
 
-        // Efectos de interacción mejorados
-        const buttons = document.querySelectorAll('.btn-primary');
-        buttons.forEach(button => {
-            button.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-3px) scale(1.02)';
-            });
-            
-            button.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
-            
-            button.addEventListener('touchstart', function() {
-                this.style.transform = 'translateY(-1px) scale(0.98)';
-            });
-            
-            button.addEventListener('touchend', function() {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-
-        // Smooth scroll para toda la página
-        document.documentElement.classList.add('smooth-scroll');
-
-        // Animación del título principal mejorada
-        const title = document.querySelector('.font-orbitron');
-        if (title) {
-            title.style.animation = 'fadeIn 1.5s ease-out, glow 3s ease-in-out infinite alternate';
+        // Smooth scroll nativo cuando esté disponible
+        if (CSS.supports('scroll-behavior', 'smooth')) {
+            document.documentElement.style.scrollBehavior = 'smooth';
         }
-
-        // Efecto de hover para las tarjetas con throttling
-        const cardElements = document.querySelectorAll('.card-hover');
-        cardElements.forEach(card => {
-            let hoverTimeout;
-            
-            card.addEventListener('mouseenter', function() {
-                clearTimeout(hoverTimeout);
-                this.style.willChange = 'transform, box-shadow';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                hoverTimeout = setTimeout(() => {
-                    this.style.willChange = 'auto';
-                }, 500);
-            });
-        });
     </script>
 </body>
 </html>
